@@ -130,6 +130,10 @@ Zero failures across every test.
 | `sample-pdfs/` | 200 PDFs sampled across the ID range (8 per puzzle) |
 | `sudoku-grids-sample.json` | 1,000 pre-extracted puzzles for quick verification |
 
+## Community
+
+Join us: **[Serious MrBeast Scavenger Hunters](https://discord.gg/KCtjNMJeYv)** (Discord)
+
 ## Credits
 
 - **Kaleokai** — Discovered the base-6 odometer position transform
