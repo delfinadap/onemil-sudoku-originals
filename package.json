@@ -1,0 +1,9 @@
+{
+  "name": "onemil-sudoku-originals",
+  "version": "1.0.0",
+  "description": "Original 25 sudoku puzzles from onemil.xyz — recovered via transform reversal",
+  "type": "commonjs",
+  "dependencies": {
+    "pdfjs-dist": "^5.4.624"
+  }
+}
