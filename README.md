@@ -2,6 +2,8 @@
 
 Every puzzle on [onemil.xyz](https://onemil.xyz) is a transformed copy of one of **25 base puzzles**. This repo contains the recovered originals and all the tools needed to verify them independently.
 
+**[Join us on Discord](https://discord.gg/KCtjNMJeYv)** — Serious MrBeast Scavenger Hunters
+
 ## The Originals
 
 **[original-25-sudoku.md](original-25-sudoku.md)** — All 25 puzzles with clues and solutions.
@@ -129,10 +131,6 @@ Zero failures across every test.
 | `identity-pdfs/` | 49 PDFs at digit-identity points across 7 ID ranges |
 | `sample-pdfs/` | 200 PDFs sampled across the ID range (8 per puzzle) |
 | `sudoku-grids-sample.json` | 1,000 pre-extracted puzzles for quick verification |
-
-## Community
-
-Join us: **[Serious MrBeast Scavenger Hunters](https://discord.gg/KCtjNMJeYv)** (Discord)
 
 ## Credits
 
