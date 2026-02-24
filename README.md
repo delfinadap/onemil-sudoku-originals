@@ -4,8 +4,6 @@ Every puzzle on [onemil.xyz](https://onemil.xyz) is a transformed copy of one of
 
 **[Join us on Discord](https://discord.gg/KCtjNMJeYv)** — Serious MrBeast Scavenger Hunters
 
-**[Community dataset](https://github.com/delfinadap/mrbeast-sudoku-data)** — 75,000+ PDF collection enabling identity-point discovery
-
 ## The Originals
 
 **[original-25-sudoku.md](original-25-sudoku.md)** — All 25 puzzles with clues and solutions.
@@ -139,4 +137,4 @@ Zero failures across every test.
 - **Kaleokai** — Discovered the base-6 odometer position transform
 - **Plurmorant** — Rotation component and verification
 - **daddidecember** — Additional verification
-- **Community** — 75,000+ PDF collection enabling identity-point discovery
+- **[Community](https://discord.gg/KCtjNMJeYv)** — 75,000+ PDF collection enabling identity-point discovery
