@@ -54,16 +54,29 @@ step n = ceil(ID / 25)
 
 ### Quick check: Identity-point PDFs
 
-IDs 252001–252025 are at step n=10081. Since 10081 mod 5040 = 1, the digit permutation is the identity. Reversing only the position transform gives the true original — both clue positions AND solution digits.
+At steps where n ≡ 1 (mod period), the digit permutation is the identity — no relabeling. Reversing only the position transform gives the true original (both clue positions AND solution digits).
 
-The `identity-pdfs/` folder contains all 25 of these PDFs.
+The `identity-pdfs/` folder contains **49 such PDFs across 7 independent ID ranges:**
+
+| ID Range | n | Identity mod | PDFs |
+|----------|---|-------------|------|
+| 108001–108025 | 4,321 | mod 720 | 5 (period-720 puzzles only) |
+| 252001–252025 | 10,081 | mod 5040 | 25 (all puzzles) |
+| 270001–270025 | 10,801 | mod 720 | 8 (period-720 puzzles only) |
+| 288001–288025 | 11,521 | mod 720 | 8 (period-720 puzzles only) |
+| 612001–612025 | 24,481 | mod 720 | 1 |
+| 666001–666025 | 26,641 | mod 720 | 1 |
+| 900001–900025 | 36,001 | mod 720 | 1 |
+
+8 puzzles have digit-permutation period 720 (puzzles #2, 9, 10, 14, 15, 16, 20, 25).
+The remaining 17 have period 5040.
 
 ```bash
 npm install
 node verify-sudoku.js identity
 ```
 
-Expected output: **25/25 match ✓**
+Expected output: **49/49 match ✓**
 
 ### Broader check: Sampled PDFs
 
@@ -94,7 +107,7 @@ node verify-sudoku.js all
 
 | Check | Count | Result |
 |-------|-------|--------|
-| Identity-point PDFs (252001–252025) | 25 | 25/25 ✓ |
+| Identity-point PDFs (7 ID ranges) | 49 | 49/49 ✓ |
 | Sampled PDFs (positions) | 2,028 | 2,028/2,028 ✓ |
 | Sampled PDFs (digit perm consistency) | 2,028 | 2,028/2,028 ✓ |
 | Full JSON dataset (positions) | 6,940 | 6,940/6,940 ✓ |
@@ -113,7 +126,7 @@ Zero failures across every test.
 | `verify-sudoku.js` | PDF extraction + solving + transform reversal + verification |
 | `generate_originals_image.py` | Position reversal algorithm + image generator |
 | `kaleokai_reverse.py` | Core transform functions (Kaleokai's algorithm) |
-| `identity-pdfs/` | 25 PDFs at digit-identity points (252001–252025) |
+| `identity-pdfs/` | 49 PDFs at digit-identity points across 7 ID ranges |
 | `sample-pdfs/` | 200 PDFs sampled across the ID range (8 per puzzle) |
 | `sudoku-grids-sample.json` | 1,000 pre-extracted puzzles for quick verification |
 

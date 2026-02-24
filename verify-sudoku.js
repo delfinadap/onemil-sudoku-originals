@@ -221,26 +221,32 @@ async function main() {
   const pdfDir = process.argv[3] || path.join(scriptDir, 'sample-pdfs');
 
   if (mode === 'identity') {
-    // Verify identity-point PDFs (252001-252025)
+    // Verify ALL identity-point PDFs in the folder
     const identityDir = process.argv[3] || path.join(scriptDir, 'identity-pdfs');
-    console.log('=== Identity Point Verification (252001-252025) ===');
-    console.log('At n=10081, n%5040=1 → digit perm is identity');
+    const files = fs.readdirSync(identityDir).filter(f => f.endsWith('.pdf')).sort((a,b) => parseInt(a) - parseInt(b));
+    console.log(`=== Identity Point Verification (${files.length} PDFs) ===`);
+    console.log('At n ≡ 1 (mod 720 or 5040), digit perm is identity');
     console.log('After reversing positions, grid should exactly match our original\n');
 
-    let ok = 0;
-    for (let k = 1; k <= 25; k++) {
-      const id = 252000 + k;
-      const n = Math.ceil(id / 25);
-      const rk = ROTATION_NUMBERS[k];
+    let ok = 0, fail = 0, solveFail = 0;
+    const byRange = {};
 
-      const data = new Uint8Array(fs.readFileSync(path.join(identityDir, id + '.pdf')));
+    for (const file of files) {
+      const data = new Uint8Array(fs.readFileSync(path.join(identityDir, file)));
       const pdf = await pdfjsLib.getDocument({ data, useSystemFonts: true }).promise;
       const page = await pdf.getPage(1);
       const tc = await page.getTextContent();
-      const { grid } = extractGrid(tc);
-      const solved = solveSudoku(grid);
+      const { puzzleId, grid, digitCount } = extractGrid(tc);
 
-      if (!solved) { console.log(`#${k}: SOLVE FAILED`); continue; }
+      // Use ID from PDF content, not filename
+      const id = puzzleId || parseInt(file);
+      const k = id % 25 || 25;
+      const n = Math.ceil(id / 25);
+      const rk = ROTATION_NUMBERS[k];
+
+      if (digitCount < 17) { solveFail++; continue; }
+      const solved = solveSudoku(grid);
+      if (!solved) { solveFail++; console.log(`  SOLVE FAIL: ${file} (ID ${id})`); continue; }
 
       const revSol = originalGrid(solved, n, rk);
       const revCl = originalGrid(grid, n, rk);
@@ -251,11 +257,21 @@ async function main() {
           if (revSol[r][c] !== origSolutions[k-1][r][c]) sm = false;
           if (revCl[r][c] !== origClues[k-1][r][c]) cm = false;
         }
-      if (sm && cm) ok++;
-      const pad = k < 10 ? ' ' : '';
-      console.log(`#${pad}${k} (ID ${id}): solution=${sm?'✓':'✗'} clues=${cm?'✓':'✗'} ${sm&&cm?'✓':'✗'}`);
+
+      const rangeBase = Math.floor((id - 1) / 25) * 25;
+      if (!byRange[rangeBase]) byRange[rangeBase] = { ok: 0, fail: 0, n };
+      if (sm && cm) { ok++; byRange[rangeBase].ok++; }
+      else { fail++; byRange[rangeBase].fail++; console.log(`  MISMATCH: ID ${id} puzzle #${k} sol=${sm?'✓':'✗'} clue=${cm?'✓':'✗'}`); }
     }
-    console.log(`\n${ok}/25 match`);
+
+    console.log('\nPer ID range:');
+    for (const [base, r] of Object.entries(byRange).sort((a,b) => parseInt(a[0]) - parseInt(b[0]))) {
+      const b = parseInt(base);
+      const total = r.ok + r.fail;
+      const mod5040 = r.n % 5040 === 1 ? ' (mod 5040)' : ' (mod 720)';
+      console.log(`  IDs ${b+1}-${b+25} (n=${r.n}${mod5040}): ${r.ok}/${total} match`);
+    }
+    console.log(`\nTotal: ${ok}/${ok + fail} match${solveFail ? `, ${solveFail} solve failures` : ''}`);
 
   } else if (mode === 'all' || mode === 'sample') {
     // Verify PDFs
